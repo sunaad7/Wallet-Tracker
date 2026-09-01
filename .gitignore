@@ -11,3 +11,8 @@ npm-debug.log*
 
 # macOS
 .DS_Store
+.vercel
+.env*
+SESSION_LOG.md
+
+SESSION_LOG.md

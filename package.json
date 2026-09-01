@@ -3,16 +3,6 @@
   "version": "1.0.0",
   "description": "Wallet Tracker — modern full-stack personal finance tracker",
   "private": true,
-  "dependencies": {
-    "express": "^5.2.1",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "mongoose": "^9.9.2",
-    "jsonwebtoken": "^9.0.3",
-    "bcryptjs": "^3.0.3",
-    "express-validator": "^7.3.2",
-    "resend": "^6.25.0"
-  },
   "scripts": {
     "install:all": "npm --prefix backend install && npm --prefix frontend install",
     "dev:backend": "npm --prefix backend run dev",
