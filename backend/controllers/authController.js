@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { isMailConfigured, sendResetCodeEmail } = require("../services/mailer");
-const { verifyGoogleIdToken, verifyFacebookToken } = require("../services/socialAuth");
+const { verifyGoogleIdToken } = require("../services/socialAuth");
 
 const DEFAULT_CATEGORIES = [
     { name: "Groceries", type: "expense", color: "#22c55e", icon: "shopping-cart" },
@@ -283,8 +283,6 @@ const socialLogin = async (req, res) => {
         let profile;
         if (provider === "google") {
             profile = await verifyGoogleIdToken(token);
-        } else if (provider === "facebook") {
-            profile = await verifyFacebookToken(token);
         } else {
             return res.status(400).json({ message: "Unsupported provider" });
         }

@@ -35,7 +35,7 @@ const waitFor = (fn, timeout = 8000) =>
 
 export default function SocialAuth({ onError }) {
   const { socialLogin } = useAuth();
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [config, setConfig] = useState(null);
   const [busy, setBusy] = useState(false);
 
@@ -43,12 +43,12 @@ export default function SocialAuth({ onError }) {
     let active = true;
     apiClient.auth.oauthConfig()
       .then((cfg) => { if (active) setConfig(cfg); })
-      .catch(() => { if (active) setConfig({ googleClientId: "", facebookAppId: "" }); });
+      .catch(() => { if (active) setConfig({ googleClientId: "" }); });
     return () => { active = false; };
   }, []);
 
   const handleGoogle = async () => {
-    setLoading("google");
+    setLoading(true);
     setBusy(true);
     try {
       if (!window.google?.accounts) {
@@ -88,43 +88,7 @@ export default function SocialAuth({ onError }) {
     }
   };
 
-  const handleFacebook = async () => {
-    setLoading("facebook");
-    setBusy(true);
-    try {
-      const appId = config?.facebookAppId;
-      if (!appId) throw new Error("Facebook login is not configured");
-
-      if (!window.FB) {
-        await loadScript("https://connect.facebook.net/en_US/sdk.js");
-        await waitFor(() => window.FB?.init);
-      }
-      window.FB.init({ appId, cookie: false, xfbml: false, version: "v19.0" });
-
-      const accessToken = await new Promise((resolve, reject) => {
-        window.FB.getLoginStatus((response) => {
-          if (response.status === "connected") return resolve(response.authResponse.accessToken);
-          window.FB.login(
-            (res) => {
-              if (res.status === "connected" && res.authResponse) resolve(res.authResponse.accessToken);
-              else reject(new Error("Facebook login was cancelled"));
-            },
-            { scope: "email", return_scopes: true }
-          );
-        });
-      });
-
-      await socialLogin("facebook", accessToken);
-    } catch (err) {
-      if (onError) onError(err.message || "Facebook login failed");
-    } finally {
-      setLoading(null);
-      setBusy(false);
-    }
-  };
-
   const googleConfigured = Boolean(config?.googleClientId);
-  const facebookConfigured = Boolean(config?.facebookAppId);
 
   return (
     <div className="space-y-3">
@@ -134,10 +98,10 @@ export default function SocialAuth({ onError }) {
           size="lg"
           className="w-full"
           disabled={busy}
-          loading={loading === "google"}
+          loading={loading}
           onClick={handleGoogle}
         >
-          {loading !== "google" && (
+          {loading !== true && (
             <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
               <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -146,24 +110,6 @@ export default function SocialAuth({ onError }) {
             </svg>
           )}
           Continue with Google
-        </Button>
-      )}
-
-      {facebookConfigured && (
-        <Button
-          variant="secondary"
-          size="lg"
-          className="w-full"
-          disabled={busy}
-          loading={loading === "facebook"}
-          onClick={handleFacebook}
-        >
-          {loading !== "facebook" && (
-            <svg width="18" height="18" viewBox="0 0 48 48" fill="#1877F2" aria-hidden="true">
-              <path d="M24 1C11.3 1 1 11.3 1 24c0 11.5 8.4 21 19.4 22.7V30.5h-5.8V24h5.8v-5c0-5.7 3.4-8.9 8.6-8.9 2.5 0 5.1.4 5.1.4v5.6h-2.9c-2.8 0-3.7 1.8-3.7 3.6V24h6.3l-1 6.5h-5.3v16.2C38.6 45 47 35.5 47 24 47 11.3 36.7 1 24 1z"/>
-            </svg>
-          )}
-          Continue with Facebook
         </Button>
       )}
     </div>

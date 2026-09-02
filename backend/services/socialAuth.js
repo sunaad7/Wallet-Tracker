@@ -32,22 +32,6 @@ const verifyGoogleIdToken = async (idToken) => {
     };
 };
 
-const verifyFacebookToken = async (accessToken) => {
-    if (!accessToken) throw new Error("Missing Facebook access token");
-    const payload = await getJson(
-        `https://graph.facebook.com/v19.0/me?fields=id,name,email&access_token=${encodeURIComponent(accessToken)}`
-    );
-    if (!payload || !payload.id) {
-        throw new Error("Invalid Facebook token");
-    }
-    return {
-        email: payload.email,
-        name: payload.name,
-        providerId: JSON.stringify(payload.id)
-    };
-};
-
 module.exports = {
-    verifyGoogleIdToken,
-    verifyFacebookToken
+    verifyGoogleIdToken
 };
