@@ -1,24 +1,8 @@
 {
   "version": 2,
-  "services": {
-    "frontend": {
-      "root": "frontend/",
-      "framework": "vite"
-    },
-    "api": {
-      "root": "backend/",
-      "framework": "express",
-      "entrypoint": "api/index.js"
-    }
-  },
+  "buildCommand": "npm --prefix frontend install && npm --prefix frontend run build",
+  "framework": null,
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": { "service": "api" }
-    },
-    {
-      "source": "/(.*)",
-      "destination": { "service": "frontend" }
-    }
+    { "source": "/(.*)", "destination": "/api/index" }
   ]
 }
