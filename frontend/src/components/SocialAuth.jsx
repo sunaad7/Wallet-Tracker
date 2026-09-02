@@ -59,6 +59,10 @@ export default function SocialAuth({ onError }) {
       if (!clientId) throw new Error("Google sign-in is not configured");
 
       const credential = await new Promise((resolve, reject) => {
+        const holder = document.createElement("div");
+        holder.style.display = "none";
+        document.body.appendChild(holder);
+
         window.google.accounts.id.initialize({
           client_id: clientId,
           callback: (response) => {
@@ -66,17 +70,18 @@ export default function SocialAuth({ onError }) {
             else reject(new Error("Google sign-in failed"));
           },
           auto_select: false,
+          cancel_on_tap_outside: true,
         });
-        window.google.accounts.id.renderButton(
-          document.createElement("div"),
-          { type: "icon", shape: "circle" }
-        );
-        window.google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            reject(new Error("Google sign-in was cancelled or could not be displayed"));
-          }
+        window.google.accounts.id.renderButton(holder, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "continue_with",
+          shape: "rectangular",
+          width: 300,
         });
-        setTimeout(() => reject(new Error("Google sign-in timed out")), 30000);
+        holder.querySelector("button")?.click();
+        setTimeout(() => reject(new Error("Google sign-in timed out")), 60000);
       });
 
       await socialLogin("google", credential);
