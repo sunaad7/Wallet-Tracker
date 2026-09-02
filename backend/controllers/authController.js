@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { isMailConfigured, sendResetCodeEmail } = require("../services/mailer");
+const { verifyGoogleIdToken, verifyFacebookToken } = require("../services/socialAuth");
 
 const DEFAULT_CATEGORIES = [
     { name: "Groceries", type: "expense", color: "#22c55e", icon: "shopping-cart" },
@@ -94,6 +95,12 @@ const loginUser = async (req, res) => {
         const user = await User.findOne({ email: normalizedEmail });
 
         if (!user) {
+            return res.status(401).json({
+                message: "Invalid email or password"
+            });
+        }
+
+        if (!user.password) {
             return res.status(401).json({
                 message: "Invalid email or password"
             });
@@ -265,11 +272,82 @@ const resetPassword = async (req, res) => {
     }
 };
 
+const socialLogin = async (req, res) => {
+    try {
+        const { provider, token } = req.body;
+
+        if (!provider || !token) {
+            return res.status(400).json({ message: "Provider and token are required" });
+        }
+
+        let profile;
+        if (provider === "google") {
+            profile = await verifyGoogleIdToken(token);
+        } else if (provider === "facebook") {
+            profile = await verifyFacebookToken(token);
+        } else {
+            return res.status(400).json({ message: "Unsupported provider" });
+        }
+
+        if (!profile || !profile.providerId) {
+            return res.status(401).json({ message: "Unable to verify social login" });
+        }
+
+        // Prefer the verified email; if the provider did not supply one, fall back
+        // to a deterministic lookup key so the user can still sign in repeatedly.
+        const findQuery = profile.email
+            ? { email: profile.email.toLowerCase().trim() }
+            : { provider, providerId: profile.providerId };
+
+        let user = await User.findOne(findQuery);
+
+        if (!user) {
+            const email = (profile.email || "").toLowerCase().trim();
+            user = await User.create({
+                name: profile.name || "Wallet Tracker User",
+                email: email || `${provider}_${profile.providerId}@wallettracker.app`,
+                password: undefined,
+                provider,
+                providerId: profile.providerId,
+                currency: "USD"
+            });
+            await seedDefaultCategories(user._id);
+        } else {
+            // Keep the linked provider metadata consistent on re-login.
+            if (!user.providerId) {
+                user.providerId = profile.providerId;
+                user.provider = provider;
+                await user.save();
+            }
+        }
+
+        const token_jwt = generateToken(user._id);
+
+        res.json({
+            message: "Login successful",
+            token: token_jwt,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                currency: user.currency
+            }
+        });
+    }
+    catch (error) {
+        res.status(401).json({
+            message: "Social login failed",
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
     getProfile,
     updateProfile,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    socialLogin
 };

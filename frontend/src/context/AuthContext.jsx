@@ -63,6 +63,15 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
+  const socialLogin = useCallback(async (provider, token) => {
+    const { data } = await api.post('/auth/social', { provider, token });
+    localStorage.setItem('wallet_tracker_token', data.token);
+    localStorage.setItem('wallet_tracker_user', JSON.stringify(data.user));
+    setToken(data.token);
+    setUser(data.user);
+    return data.user;
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem('wallet_tracker_token');
     localStorage.removeItem('wallet_tracker_user');
@@ -76,15 +85,15 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(() => ({
-    user, token, loading, login, register, resetPassword, logout, updateUser,
-  }), [user, token, loading, login, register, resetPassword, logout, updateUser]);
+    user, token, loading, login, register, socialLogin, resetPassword, logout, updateUser,
+  }), [user, token, loading, login, register, socialLogin, resetPassword, logout, updateUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  return ctx || { user: null, token: null, loading: false, login: async () => {}, register: async () => {}, resetPassword: async () => {}, logout: () => {}, updateUser: () => {} };
+  return ctx || { user: null, token: null, loading: false, login: async () => {}, register: async () => {}, socialLogin: async () => {}, resetPassword: async () => {}, logout: () => {}, updateUser: () => {} };
 };
 
 export { apiError };

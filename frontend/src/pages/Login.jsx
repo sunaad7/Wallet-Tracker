@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, Field, Input, PasswordInput } from "../components/ui/Form.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import SocialAuth from "../components/SocialAuth.jsx";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -38,6 +39,10 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleSocialError(message) {
+    setServerError(message);
   }
 
   return (
@@ -106,6 +111,16 @@ export default function Login() {
           </Button>
         </div>
       </form>
+
+      <div className="my-6 flex items-center gap-3">
+        <span className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
+        <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">
+          or continue with
+        </span>
+        <span className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
+      </div>
+
+      <SocialAuth onError={handleSocialError} />
 
       <p className="mt-7 text-center text-xs text-slate-500 dark:text-slate-400">
         New to Wallet Tracker?{" "}

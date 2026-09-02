@@ -104,6 +104,8 @@ export const apiClient = {
   auth: {
     login: (credentials) => request(() => api.post('/auth/login', credentials)).then(storeSession),
     register: (details) => request(() => api.post('/auth/register', details)).then(storeSession),
+    social: (provider, token) => request(() => api.post('/auth/social', { provider, token })).then(storeSession),
+    oauthConfig: () => request(() => api.get('/auth/config')),
     forgotPassword: (email) => request(() => api.post('/auth/forgot-password', { email })),
     resetPassword: (email, code, password) => request(() => api.post('/auth/reset-password', { email, code, password })).then(storeSession),
     logout: () => {

@@ -52,6 +52,14 @@ app.get("/", (req, res) => {
     });
 });
 
+// Public OAuth client identifiers for the frontend social-login buttons.
+app.get("/api/auth/config", (req, res) => {
+    res.json({
+        googleClientId: process.env.GOOGLE_CLIENT_ID || "",
+        facebookAppId: process.env.FACEBOOK_APP_ID || ""
+    });
+});
+
 app.use(notFound);
 app.use(errorHandler);
 
