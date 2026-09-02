@@ -10,6 +10,13 @@ router.post("/social", socialLogin);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
+// Public OAuth client identifiers for the frontend social-login buttons.
+router.get("/config", (req, res) => {
+    res.json({
+        googleClientId: process.env.GOOGLE_CLIENT_ID || ""
+    });
+});
+
 router.get("/profile", protect, getProfile);
 router.put("/profile", protect, updateProfile);
 
