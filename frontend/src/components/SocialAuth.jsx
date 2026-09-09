@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { apiClient, apiError } from "../lib/api.js";
 
@@ -52,6 +53,7 @@ const renderGoogleButton = (element, clientId, callback) => {
 };
 
 export default function SocialAuth({ onError }) {
+  const navigate = useNavigate();
   const { socialLogin } = useAuth();
   const [config, setConfig] = useState(null);
   const buttonRef = useRef(null);
@@ -83,10 +85,12 @@ export default function SocialAuth({ onError }) {
           if (doneRef.current) return;
           if (response?.credential) {
             doneRef.current = true;
-            socialLogin("google", response.credential).catch((err) => {
-              doneRef.current = false;
-              if (onError) onError(apiError(err, err.message || "Google sign-in failed"));
-            });
+            socialLogin("google", response.credential)
+              .then(() => navigate("/dashboard"))
+              .catch((err) => {
+                doneRef.current = false;
+                if (onError) onError(apiError(err, err.message || "Google sign-in failed"));
+              });
           } else {
             if (onError) onError("Google sign-in failed");
           }
