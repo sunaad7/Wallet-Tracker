@@ -23,7 +23,7 @@ export default function Modal({ open, onClose, title, description, children, foo
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
       <div className="absolute inset-0 bg-slate-950/50 animate-fade-in" onClick={onClose} aria-hidden="true" />
 
       <div
@@ -35,21 +35,21 @@ export default function Modal({ open, onClose, title, description, children, foo
           sizes[size]
         )}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-white/[0.06]">
-          <div>
+        <div className="flex items-center justify-between px-4 py-3.5 border-b border-slate-100 sm:px-6 sm:py-4 dark:border-white/[0.06]">
+          <div className="min-w-0 pr-2">
             <h2 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">{title}</h2>
             {description && <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{description}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:text-slate-200 dark:hover:bg-white/5 transition-colors"
+            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:text-slate-200 dark:hover:bg-white/5 transition-colors shrink-0"
           >
             <X size={18} />
           </button>
         </div>
-        <div className="px-6 py-5 max-h-[72vh] overflow-y-auto">{children}</div>
+        <div className="px-4 py-4 max-h-[68vh] overflow-y-auto sm:px-6 sm:py-5">{children}</div>
         {footer && (
-          <div className="px-6 py-4 border-t border-slate-100 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] flex justify-end items-center gap-3">
+          <div className="px-4 py-3.5 border-t border-slate-100 sm:px-6 sm:py-4 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2.5 sm:gap-3">
             {footer}
           </div>
         )}

@@ -17,7 +17,7 @@ export function Card({ className = '', children, variant, ...props }) {
 
 export function CardHeader({ title, subtitle, action, className = '', children }) {
   return (
-    <div className={clsx('flex items-start justify-between gap-3 px-5 pt-5', className)}>
+    <div className={clsx('flex items-start justify-between gap-3 px-4 pt-4 sm:px-5 sm:pt-5', className)}>
       {children || <>
         <div>
           <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-white">{title}</h3>
@@ -30,11 +30,11 @@ export function CardHeader({ title, subtitle, action, className = '', children }
 }
 
 export function CardContent({ className = '', children }) {
-  return <div className={clsx('p-5', className)}>{children}</div>;
+  return <div className={clsx('p-4 sm:p-5', className)}>{children}</div>;
 }
 
 export function CardFooter({ className = '', children }) {
-  return <div className={clsx('flex items-center border-t border-slate-100 px-5 py-4 dark:border-white/[0.06]', className)}>{children}</div>;
+  return <div className={clsx('flex items-center border-t border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]', className)}>{children}</div>;
 }
 
 export function CardTitle({ className = '', children }) {

@@ -21,7 +21,7 @@ export default function StatCard({ label, value, sub, icon: Icon, tone = 'brand'
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
-          <p className="mt-1.5 text-2xl font-semibold text-slate-900 dark:text-white tracking-tight truncate">{display}</p>
+          <p className="mt-1.5 text-xl font-semibold text-slate-900 sm:text-2xl dark:text-white tracking-tight truncate">{display}</p>
           {(sub || deltaLabel || hint) && (
             <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
               {(trend !== undefined || delta !== undefined) && ((trend ?? delta) > 0 ? (

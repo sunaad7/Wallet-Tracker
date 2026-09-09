@@ -64,22 +64,22 @@ export default function Goals() {
       />
 
       {/* Summary */}
-      <Card className="p-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-          <div className="flex items-center gap-4">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
-              <Target size={21} strokeWidth={2.2} />
+      <Card className="p-4 sm:p-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <span className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+              <Target size={20} strokeWidth={2.2} />
             </span>
-            <div>
+            <div className="min-w-0">
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Combined progress</p>
-              <p className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+              <p className="truncate text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
                 {formatCurrencyWhole(totalSaved)} <span className="text-sm font-normal text-slate-400">of {formatCurrencyWhole(totalTarget)} target</span>
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-4 sm:gap-5">
             <div className="text-right">
-              <span className="text-3xl font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">
+              <span className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">
                 {Math.round((totalSaved / Math.max(totalTarget, 1)) * 100)}
               </span>
               <p className="text-xs text-slate-400 dark:text-slate-500">overall saved</p>
@@ -120,7 +120,7 @@ export default function Goals() {
             const daysLeft = daysUntil(g.deadline);
             const monthlyNeeded = done ? 0 : Math.max(0, (g.target - g.saved) / Math.max(1, Math.ceil(daysLeft / 30)));
             return (
-              <Card key={g.id} className="group flex flex-col justify-between p-5">
+              <Card key={g.id} className="group flex flex-col justify-between p-4 sm:p-5">
                 <div>
                   <div className="flex items-start justify-between">
                     <span className={cn("flex h-11 w-11 items-center justify-center rounded-lg", color.chip)}>

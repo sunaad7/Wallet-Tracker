@@ -90,28 +90,30 @@ export default function Budgets() {
             const near = !over && pct >= 80;
             const remaining = b.limit - b.spent;
             return (
-              <Card key={b.id} className="group relative p-5">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+              <Card key={b.id} className="group relative p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
                       <cat.icon size={19} strokeWidth={2.2} />
                     </span>
-                    <div>
-                      <p className="text-base font-semibold tracking-tight text-slate-900 dark:text-white">{cat.label}</p>
-                      <p className="text-xs text-slate-400 dark:text-slate-500">Monthly limit</p>
+                    <div className="min-w-0">
+                      <p className="truncate text-base font-semibold tracking-tight text-slate-900 dark:text-white">{cat.label}</p>
+                      <p className="truncate text-xs text-slate-400 dark:text-slate-500">Monthly limit</p>
                     </div>
                   </div>
-                  {over ? (
-                    <Badge tone="danger" dot>Over limit</Badge>
-                  ) : near ? (
-                    <Badge tone="warning" dot>80%+ used</Badge>
-                  ) : (
-                    <Badge tone="success" dot>On track</Badge>
-                  )}
+                  <div className="shrink-0">
+                    {over ? (
+                      <Badge tone="danger" dot>Over limit</Badge>
+                    ) : near ? (
+                      <Badge tone="warning" dot>80%+ used</Badge>
+                    ) : (
+                      <Badge tone="success" dot>On track</Badge>
+                    )}
+                  </div>
                 </div>
 
-                <div className="mt-5 flex items-baseline justify-between">
-                  <span className="text-2xl font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">
+                <div className="mt-4 sm:mt-5 flex items-baseline justify-between">
+                  <span className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">
                     {formatCurrency(b.spent)}
                   </span>
                   <span className="text-xs text-slate-400 dark:text-slate-500">of {formatCurrency(b.limit)}</span>
@@ -121,8 +123,8 @@ export default function Budgets() {
                   <ProgressBar value={b.spent} max={b.limit} />
                 </div>
 
-                <div className="mt-4 flex items-center justify-between pt-2 border-t border-slate-100 dark:border-white/[0.04]">
-                  <p className={cn("text-xs font-semibold tabular-nums", over ? "text-rose-600 dark:text-rose-400" : near ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400")}>
+                <div className="mt-4 flex items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-white/[0.04]">
+                  <p className={cn("text-xs font-semibold tabular-nums truncate", over ? "text-rose-600 dark:text-rose-400" : near ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400")}>
                     {over
                       ? `${formatCurrency(-remaining)} exceeded`
                       : `${formatCurrency(remaining)} remaining`}
@@ -131,7 +133,7 @@ export default function Budgets() {
                     type="button"
                     onClick={() => handleDelete(b.id)}
                     aria-label={`Delete ${cat.label} budget`}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 opacity-0 transition-all hover:bg-rose-50 hover:text-rose-600 group-hover:opacity-100 focus-visible:opacity-100 dark:hover:bg-rose-500/10 dark:hover:text-rose-400 cursor-pointer"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-all hover:bg-rose-50 hover:text-rose-600 focus-visible:opacity-100 md:opacity-0 md:group-hover:opacity-100 dark:hover:bg-rose-500/10 dark:hover:text-rose-400 cursor-pointer"
                   >
                     <Trash2 size={15} />
                   </button>
@@ -155,13 +157,13 @@ function OverviewCard({ label, value, icon: Icon, tone }) {
     rose: "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400",
   };
   return (
-    <Card className="flex items-center gap-4 p-4">
-      <span className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-lg", tones[tone])}>
-        <Icon size={20} strokeWidth={2.2} />
+    <Card className="flex items-center gap-4 p-3.5 sm:p-4">
+      <span className={cn("flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg", tones[tone])}>
+        <Icon size={19} strokeWidth={2.2} />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
-        <p className="mt-0.5 truncate text-xl font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">{value}</p>
+        <p className="truncate text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
+        <p className="mt-0.5 truncate text-lg sm:text-xl font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">{value}</p>
       </div>
     </Card>
   );

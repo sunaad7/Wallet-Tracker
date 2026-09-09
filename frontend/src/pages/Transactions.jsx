@@ -123,7 +123,7 @@ export default function Transactions() {
 
       <Card className="overflow-hidden">
         {/* Toolbar */}
-        <div className="flex flex-col gap-3.5 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-center dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02]">
+        <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-3 sm:flex-row sm:items-center sm:px-5 sm:py-4 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02]">
           <div className="relative flex-1 sm:max-w-sm">
             <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <Input
@@ -135,12 +135,12 @@ export default function Transactions() {
               className="pl-9.5 h-10"
             />
           </div>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <Select
               aria-label="Filter by type"
               value={typeFilter}
               onChange={(e) => { setTypeFilter(e.target.value); setPage(1); }}
-              className="w-auto! min-w-36 h-10"
+              className="w-auto! min-w-0 flex-1 sm:flex-none sm:min-w-36 h-10"
             >
               <option value="all">All types</option>
               <option value="income">Income</option>
@@ -150,7 +150,7 @@ export default function Transactions() {
               aria-label="Filter by category"
               value={categoryFilter}
               onChange={(e) => { setCategoryFilter(e.target.value); setPage(1); }}
-              className="w-auto! min-w-44 h-10"
+              className="w-auto! min-w-0 flex-1 sm:flex-none sm:min-w-44 h-10"
             >
               <option value="all">All categories</option>
               {Object.entries(CATEGORY_META).map(([key, meta]) => (
@@ -193,7 +193,7 @@ export default function Transactions() {
           />
         ) : (
           <>
-            <div className="overflow-x-auto">
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full min-w-[720px] text-left">
                 <thead>
                   <tr className="border-b border-slate-100 text-[11px] font-semibold tracking-wider text-slate-400 uppercase dark:border-white/[0.06] dark:text-slate-500">
@@ -264,23 +264,36 @@ export default function Transactions() {
                 <Button variant="secondary" size="sm" disabled={safePage <= 1} onClick={() => setPage(safePage - 1)}>
                   Previous
                 </Button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                  <button
-                    key={p}
-                    type="button"
-                    onClick={() => setPage(p)}
-                    aria-label={`Page ${p}`}
-                    aria-current={p === safePage ? "page" : undefined}
-                    className={cn(
-                      "h-8 w-8 rounded-lg text-[13px] font-medium transition-colors",
-                      p === safePage
-                        ? "bg-blue-600 text-white"
-                        : "text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/5"
-                    )}
-                  >
-                    {p}
-                  </button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).filter((p) => {
+                  if (totalPages <= 5) return true;
+                  if (p === 1 || p === totalPages) return true;
+                  if (Math.abs(p - safePage) <= 1) return true;
+                  return false;
+                }).reduce((acc, p, i, arr) => {
+                  if (i > 0 && p - arr[i - 1] > 1) acc.push("...");
+                  acc.push(p);
+                  return acc;
+                }, []).map((p, i) =>
+                  p === "..." ? (
+                    <span key={`ellipsis-${i}`} className="h-8 px-1 flex items-center text-xs text-slate-400">…</span>
+                  ) : (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setPage(p)}
+                      aria-label={`Page ${p}`}
+                      aria-current={p === safePage ? "page" : undefined}
+                      className={cn(
+                        "h-8 w-8 rounded-lg text-[13px] font-medium transition-colors",
+                        p === safePage
+                          ? "bg-blue-600 text-white"
+                          : "text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/5"
+                      )}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
                 <Button variant="secondary" size="sm" disabled={safePage >= totalPages} onClick={() => setPage(safePage + 1)}>
                   Next
                 </Button>
@@ -298,23 +311,46 @@ export default function Transactions() {
             const income = t.type === "income";
             return (
               <Card key={t.id} className="p-4">
-                <div className="flex items-center gap-3">
+                <div className="flex items-start gap-3">
                   <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", income ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-slate-100 text-slate-500 dark:bg-white/5 dark:text-slate-400")}>
                     <cat.icon size={16} strokeWidth={2.1} />
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">{t.description}</p>
                     <p className="text-[11.5px] text-slate-400 dark:text-slate-500">
-                      {formatRelativeDay(new Date(t.date))} · {cat.label}
+                      {formatRelativeDay(new Date(t.date))} · {cat.label} · {t.account}
                     </p>
                   </div>
                   <span className={cn("text-[13.5px] font-semibold tabular-nums", income ? "text-emerald-600 dark:text-emerald-400" : "text-slate-800 dark:text-slate-100")}>
                     {income ? "+" : "−"}{formatCurrency(t.amount)}
                   </span>
                 </div>
+                <div className="mt-3 flex justify-end gap-1 border-t border-slate-100 dark:border-white/[0.06] pt-2.5">
+                  <button type="button" onClick={() => openEdit(t)} className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-slate-200">
+                    <Pencil size={12} /> Edit
+                  </button>
+                  <button type="button" onClick={() => handleDelete(t.id)} className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-rose-500 transition-colors hover:bg-rose-50 hover:text-rose-600 dark:text-rose-400 dark:hover:bg-rose-500/10 dark:hover:text-rose-300">
+                    <Trash2 size={12} /> Delete
+                  </button>
+                </div>
               </Card>
             );
           })}
+        </div>
+      )}
+
+      {/* Mobile pagination */}
+      {!loading && filtered.length > PAGE_SIZE && (
+        <div className="flex items-center justify-between gap-3 md:hidden">
+          <Button variant="secondary" size="sm" disabled={safePage <= 1} onClick={() => setPage(safePage - 1)}>
+            Previous
+          </Button>
+          <p className="text-xs text-slate-400 dark:text-slate-500">
+            <span className="font-semibold text-slate-600 dark:text-slate-300">{safePage}</span> / <span className="font-semibold text-slate-600 dark:text-slate-300">{totalPages}</span>
+          </p>
+          <Button variant="secondary" size="sm" disabled={safePage >= totalPages} onClick={() => setPage(safePage + 1)}>
+            Next
+          </Button>
         </div>
       )}
 

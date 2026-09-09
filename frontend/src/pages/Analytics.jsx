@@ -53,7 +53,7 @@ export default function Analytics() {
                 aria-selected={range === r.key}
                 onClick={() => setRange(r.key)}
                 className={cn(
-                  "rounded-md px-3.5 py-1.5 text-xs font-medium transition-colors cursor-pointer",
+                  "rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer sm:px-3.5 flex-1 sm:flex-none whitespace-nowrap",
                   range === r.key
                     ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
                     : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
@@ -87,43 +87,43 @@ export default function Analytics() {
 
           {/* Cashflow Chart */}
           <Card>
-            <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
               <div>
                 <h2 className="text-base font-semibold text-slate-900 dark:text-white">Cash flow</h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400">Monthly income vs. spending</p>
               </div>
               <Badge tone="brand" dot>Period: {range.toUpperCase()}</Badge>
             </div>
-            <div className="p-5">
+            <div className="p-4 sm:p-5">
               <CashflowChart data={visible} height={300} />
             </div>
           </Card>
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2">
             {/* Category mix */}
             <Card>
-              <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+              <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
                 <div>
                   <h2 className="text-base font-semibold text-slate-900 dark:text-white">Spending mix</h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">Category share</p>
                 </div>
                 <PieChart size={18} className="text-blue-500" />
               </div>
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 <SpendingDonut data={data.categoryBars} height={230} centerLabel="Total" centerValue={formatCurrency(data.categoryBars.reduce((s, c) => s + c.value, 0))} />
               </div>
             </Card>
 
             {/* Category bars */}
             <Card>
-              <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+              <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
                 <div>
                   <h2 className="text-base font-semibold text-slate-900 dark:text-white">Spend by category</h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">Top outflows</p>
                 </div>
                 <BarChart3 size={18} className="text-sky-500" />
               </div>
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 <CategoryBars data={data.categoryBars.slice(0, 7)} height={260} />
               </div>
             </Card>
@@ -131,14 +131,14 @@ export default function Analytics() {
 
           {/* Top merchants */}
           <Card>
-            <div className="border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+            <div className="border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
               <h2 className="text-base font-semibold text-slate-900 dark:text-white">Top merchants</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">Where spending goes most often</p>
             </div>
-            <ul className="divide-y divide-slate-100 px-5 dark:divide-white/[0.04]">
+            <ul className="divide-y divide-slate-100 px-4 sm:px-5 dark:divide-white/[0.04]">
               {data.topMerchants.map((m, i) => (
-                <li key={m.name} className="flex items-center gap-4 py-3.5">
-                  <span className="w-6 text-center text-xs font-semibold text-blue-500 dark:text-blue-400 tabular-nums">
+                <li key={m.name} className="flex items-center gap-3 py-3.5 sm:gap-4">
+                  <span className="hidden w-6 text-center text-xs font-semibold text-blue-500 sm:block dark:text-blue-400 tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">

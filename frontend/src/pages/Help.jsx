@@ -75,7 +75,7 @@ function FaqItem({ faq, open, onToggle }) {
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer"
+        className="flex w-full items-center justify-between gap-4 px-4 py-3.5 text-left sm:px-5 sm:py-4 cursor-pointer"
       >
         <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{faq.q}</span>
         <ChevronDown
@@ -88,7 +88,7 @@ function FaqItem({ faq, open, onToggle }) {
       </button>
       <div className={cn("grid transition-all duration-200", open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0")}>
         <div className="overflow-hidden">
-          <p className="px-5 pb-4 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{faq.a}</p>
+          <p className="px-4 pb-4 text-[13px] leading-relaxed text-slate-500 sm:px-5 dark:text-slate-400">{faq.a}</p>
         </div>
       </div>
     </div>
@@ -112,7 +112,7 @@ export default function Help() {
       />
 
       <Card>
-        <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+        <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
           <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
             <ArrowLeftRight size={18} strokeWidth={2.2} />
           </span>
@@ -140,7 +140,7 @@ export default function Help() {
       </Card>
 
       <Card>
-        <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+        <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
           <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
             <LifeBuoy size={18} strokeWidth={2.2} />
           </span>
@@ -157,7 +157,7 @@ export default function Help() {
       </Card>
 
       <Card>
-        <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+        <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
           <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
             <Bell size={18} strokeWidth={2.2} />
           </span>

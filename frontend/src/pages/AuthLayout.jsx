@@ -75,8 +75,8 @@ export default function AuthLayout() {
           </button>
         </div>
 
-        <div className="relative z-10 flex flex-1 items-center justify-center px-6 py-10 sm:px-12">
-          <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-8 shadow-card dark:border-white/10 dark:bg-slate-900">
+        <div className="relative z-10 flex flex-1 items-center justify-center px-4 py-8 sm:px-12 sm:py-10">
+          <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-card sm:p-8 dark:border-white/10 dark:bg-slate-900">
             <Outlet />
           </div>
         </div>

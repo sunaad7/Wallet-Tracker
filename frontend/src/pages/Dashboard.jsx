@@ -69,35 +69,39 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Greeting Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
             {formatMonthYear(new Date())} · {new Date().toLocaleDateString("en-US", { weekday: "long" })}
           </p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="mt-1 text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
             {greeting()}, {firstName}
           </h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Here's your financial picture at a glance.
           </p>
         </div>
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0 sm:gap-3">
           <Button
             variant="secondary"
-            size="md"
+            size="sm"
             icon={Download}
             onClick={handleExport}
             loading={exporting}
+            className="sm:px-4 sm:py-2 sm:text-sm"
           >
-            <span>Export CSV</span>
+            <span className="hidden sm:inline">Export CSV</span>
+            <span className="sm:hidden">Export</span>
           </Button>
           <Button
             variant="primary"
-            size="md"
+            size="sm"
             icon={Plus}
             onClick={() => navigate("/transactions")}
+            className="sm:px-4 sm:py-2 sm:text-sm"
           >
-            Add transaction
+            <span className="hidden sm:inline">Add transaction</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </div>
       </div>
@@ -143,9 +147,9 @@ export default function Dashboard() {
       </div>
 
       {/* Cashflow + Donut */}
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
             <div>
               <h2 className="text-base font-semibold text-slate-900 dark:text-white">Cash flow</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">Income vs. spending over 6 months</p>
@@ -154,17 +158,17 @@ export default function Dashboard() {
               Full analytics <ChevronRight size={14} />
             </LineHoverLink>
           </div>
-          <div className="p-5">
+          <div className="p-4 sm:p-5">
             <CashflowChart data={cashflow} height={264} />
           </div>
         </Card>
 
         <Card>
-          <div className="border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+          <div className="border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
             <h2 className="text-base font-semibold text-slate-900 dark:text-white">Spending mix</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">Top categories breakdown</p>
           </div>
-          <div className="p-5">
+          <div className="p-4 sm:p-5">
             <SpendingDonut data={categorySplit} height={190} centerValue={formatCurrencyWhole(stats.expense)} />
             <ul className="mt-4 space-y-2.5">
               {categorySplit.slice(0, 4).map((c) => (
@@ -185,9 +189,9 @@ export default function Dashboard() {
       </div>
 
       {/* Recent activity + Budgets */}
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
             <div>
               <h2 className="text-base font-semibold text-slate-900 dark:text-white">Recent activity</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">Latest transactions</p>
@@ -201,7 +205,7 @@ export default function Dashboard() {
               const cat = getCategory(t.category);
               const income = t.type === "income";
               return (
-                <li key={t.id} className="flex items-center gap-3.5 px-5 py-3">
+                <li key={t.id} className="flex items-center gap-3 px-4 py-3 sm:gap-3.5 sm:px-5 sm:py-3">
                   <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${cat.tone === "income" ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"}`}>
                     <cat.icon size={16} strokeWidth={2.2} />
                   </span>
@@ -221,7 +225,7 @@ export default function Dashboard() {
         </Card>
 
         <Card>
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
             <div>
               <h2 className="text-base font-semibold text-slate-900 dark:text-white">Active budgets</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">Monthly category allowances</p>
@@ -230,7 +234,7 @@ export default function Dashboard() {
               Manage <ChevronRight size={14} />
             </LineHoverLink>
           </div>
-          <div className="space-y-4 p-5">
+          <div className="space-y-4 p-4 sm:p-5">
             {budgetSummary.slice(0, 4).map((b) => {
               const cat = getCategory(b.category);
               const over = b.spent > b.limit;
@@ -264,7 +268,7 @@ export default function Dashboard() {
 
       {/* Savings Goals Strip */}
       <Card>
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-white/[0.06]">
+        <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06]">
           <div>
             <h2 className="text-base font-semibold text-slate-900 dark:text-white">Savings goals</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">Target milestones & progress</p>
@@ -273,8 +277,8 @@ export default function Dashboard() {
             All goals <ChevronRight size={14} />
           </LineHoverLink>
         </div>
-        <div className="p-5">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="p-4 sm:p-5">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
             {goalsPreview.map((g) => {
               const pct = Math.min(100, g.pct);
               return (
@@ -304,8 +308,8 @@ export default function Dashboard() {
       </Card>
 
       {/* Insights teaser */}
-      <Card className="p-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+      <Card className="p-4 sm:p-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
           <div className="flex items-center gap-4">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
               <Sparkles size={20} strokeWidth={2} />

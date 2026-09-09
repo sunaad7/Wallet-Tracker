@@ -95,21 +95,30 @@ export default function Recurring() {
             const overdue = r.active && d < 0;
             return (
               <Card key={r.id} className={cn("p-5 transition-opacity", !r.active && "opacity-60")}>
-                <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-3 sm:flex-wrap sm:items-center sm:gap-4">
                   <span className={cn(
-                    "flex h-11 w-11 shrink-0 items-center justify-center rounded-lg",
+                    "flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg",
                     r.active
                       ? "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
                       : "bg-slate-100 text-slate-400 dark:bg-white/5 dark:text-slate-600"
                   )}>
-                    <cat.icon size={19} strokeWidth={2.2} />
+                    <cat.icon size={18} strokeWidth={2.2} />
                   </span>
 
                   <div className="min-w-0 flex-1">
-                    <p className="text-base font-semibold tracking-tight text-slate-900 dark:text-white">{r.name}</p>
-                    <p className="text-xs text-slate-400 dark:text-slate-500">
+                    <p className="truncate text-[15px] sm:text-base font-semibold tracking-tight text-slate-900 dark:text-white">{r.name}</p>
+                    <p className="truncate text-[11.5px] sm:text-xs text-slate-400 dark:text-slate-500">
                       {r.merchant} · {r.frequency} · {cat.label}
                     </p>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-2 sm:hidden">
+                      <span className="flex items-center gap-1.5 text-[11.5px] font-medium text-slate-500 dark:text-slate-400">
+                        <CalendarClock size={13} className="text-slate-400" />
+                        {formatISODay(r.nextDue)}
+                      </span>
+                      {upcoming && <Badge tone="warning" dot>Due soon</Badge>}
+                      {overdue && <Badge tone="danger" dot>Overdue</Badge>}
+                      {!r.active && <Badge tone="neutral">Paused</Badge>}
+                    </div>
                   </div>
 
                   <div className="hidden sm:flex sm:items-center sm:gap-3">
@@ -122,7 +131,7 @@ export default function Recurring() {
                     {!r.active && <Badge tone="neutral">Paused</Badge>}
                   </div>
 
-                  <span className="text-base font-semibold text-slate-900 tabular-nums dark:text-white">
+                  <span className="ml-auto sm:ml-0 text-[15px] sm:text-base font-semibold text-slate-900 tabular-nums dark:text-white">
                     {formatCurrency(r.amount)}
                   </span>
 

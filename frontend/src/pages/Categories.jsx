@@ -87,20 +87,20 @@ export default function Categories() {
             const meta = getCategory(c.key);
             const share = (c.total / maxTotal) * 100;
             return (
-              <Card key={c.id} className="group p-5">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className={cn("flex h-11 w-11 items-center justify-center rounded-lg", meta.tone === "income" ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400")}>
-                      <meta.icon size={19} strokeWidth={2.2} />
+              <Card key={c.id} className="group p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className={cn("flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg", meta.tone === "income" ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400")}>
+                      <meta.icon size={18} strokeWidth={2.2} />
                     </span>
-                    <div>
-                      <p className="text-base font-semibold tracking-tight text-slate-900 dark:text-white">{c.label}</p>
-                      <p className="text-xs text-slate-400 dark:text-slate-500">
+                    <div className="min-w-0">
+                      <p className="truncate text-base font-semibold tracking-tight text-slate-900 dark:text-white">{c.label}</p>
+                      <p className="truncate text-xs text-slate-400 dark:text-slate-500">
                         {c.transactionCount} transactions
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+                  <div className="flex gap-1 md:opacity-0 md:transition-opacity md:group-hover:opacity-100 md:focus-within:opacity-100">
                     <button
                       type="button"
                       aria-label={`Edit ${c.label}`}
@@ -120,8 +120,8 @@ export default function Categories() {
                   </div>
                 </div>
 
-                <div className="mt-5 flex items-baseline justify-between">
-                  <p className="text-xl font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">
+                <div className="mt-4 sm:mt-5 flex items-baseline justify-between">
+                  <p className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">
                     {formatCurrency(c.total)}
                   </p>
                   <Badge tone={meta.tone === "income" ? "success" : "neutral"}>{Math.round(share)}% of max</Badge>

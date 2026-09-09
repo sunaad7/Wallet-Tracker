@@ -55,8 +55,8 @@ export default function Insights() {
       />
 
       {/* Summary strip */}
-      <Card className="p-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+      <Card className="p-4 sm:p-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
           <div>
             <p className="text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
               {insights.length} insights identified
@@ -71,6 +71,7 @@ export default function Insights() {
             icon={RefreshCw}
             loading={regenerating}
             onClick={regenerate}
+            className="self-start sm:self-auto"
           >
             Re-scan data
           </Button>
@@ -89,16 +90,16 @@ export default function Insights() {
           {insights.map((insight) => {
             const meta = TYPE_META[insight.type] || TYPE_META.tip;
             return (
-              <Card key={insight.id} className="flex flex-col justify-between p-5">
+              <Card key={insight.id} className="flex flex-col justify-between p-4 sm:p-5">
                 <div>
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <span className={cn("flex h-10 w-10 items-center justify-center rounded-lg", meta.chip)}>
+                  <div className="flex items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", meta.chip)}>
                         <meta.icon size={18} strokeWidth={2.2} />
                       </span>
                       <Badge tone={meta.tone} dot>{meta.label}</Badge>
                     </div>
-                    <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-500 tabular-nums dark:bg-white/5 dark:text-slate-400">
+                    <span className="shrink-0 rounded-md bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-500 tabular-nums dark:bg-white/5 dark:text-slate-400">
                       {insight.metric}
                     </span>
                   </div>

@@ -155,7 +155,7 @@ function StatementCard() {
 
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_24px_60px_-30px_rgba(11,31,51,0.35)] dark:border-white/10 dark:bg-slate-900 dark:shadow-black/40">
         {/* statement header */}
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3.5 dark:border-white/[0.06]">
+        <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3 sm:px-5 sm:py-3.5 dark:border-white/[0.06]">
           <p className="font-mono text-[10px] font-medium tracking-[0.18em] text-slate-400 uppercase dark:text-slate-500">
             Account statement
           </p>
@@ -165,14 +165,14 @@ function StatementCard() {
         </div>
 
         {/* rows */}
-        <div className="px-5 py-4">
-          <div className="grid grid-cols-[3.4rem_1fr_auto_auto] gap-x-3 font-mono text-[10px] tracking-[0.12em] text-slate-400 uppercase dark:text-slate-500">
+        <div className="px-4 py-4 sm:px-5">
+          <div className="hidden sm:grid sm:grid-cols-[3.4rem_1fr_auto_auto] sm:gap-x-3 font-mono text-[10px] tracking-[0.12em] text-slate-400 uppercase dark:text-slate-500">
             <span>Date</span>
             <span>Description</span>
             <span className="text-right">Amount</span>
             <span className="w-20 text-right">Balance</span>
           </div>
-          <div className="mt-1.5 space-y-0">
+          <div className="mt-0 sm:mt-1.5 space-y-0">
             {STATEMENT.map((row, index) => {
               const show = index < posted;
               const income = row.type === "income";
@@ -181,7 +181,7 @@ function StatementCard() {
                   key={`${row.date}-${row.desc}`}
                   style={show ? { transitionDelay: `${index * 40}ms` } : undefined}
                   className={cn(
-                    "grid grid-cols-[3.4rem_1fr_auto_auto] gap-x-3 border-t border-slate-100 py-2 text-[12.5px] transition-all duration-500 dark:border-white/[0.05]",
+                    "grid grid-cols-[3rem_1fr_auto] sm:grid-cols-[3.4rem_1fr_auto_auto] gap-x-2 sm:gap-x-3 border-t border-slate-100 py-2 text-[12px] sm:text-[12.5px] transition-all duration-500 dark:border-white/[0.05]",
                     show ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0",
                   )}
                 >
@@ -190,7 +190,7 @@ function StatementCard() {
                   <span className={cn("font-mono font-medium tabular-nums text-right", income ? "text-money" : "text-spend")}>
                     {income ? "+" : "−"}{Math.abs(row.amount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
-                  <span className="w-20 pr-0.5 text-right font-mono text-[11px] tabular-nums text-slate-500 dark:text-slate-400">
+                  <span className="hidden sm:block w-20 pr-0.5 text-right font-mono text-[11px] tabular-nums text-slate-500 dark:text-slate-400">
                     {money(runningBalances[index + 1])}
                   </span>
                 </div>
@@ -200,7 +200,7 @@ function StatementCard() {
         </div>
 
         {/* closing balance */}
-        <div className="flex items-end justify-between border-t border-slate-100 bg-slate-50/80 px-5 py-4 dark:border-white/[0.06] dark:bg-white/[0.03]">
+        <div className="flex items-end justify-between border-t border-slate-100 bg-slate-50/80 px-4 py-3.5 sm:px-5 sm:py-4 dark:border-white/[0.06] dark:bg-white/[0.03]">
           <div>
             <p className="font-mono text-[10px] tracking-[0.18em] text-slate-400 uppercase dark:text-slate-500">Balance</p>
             <p className="mt-1 font-mono text-xs text-slate-400 dark:text-slate-500">As of 21 Mar</p>
@@ -208,7 +208,7 @@ function StatementCard() {
           <p
             role="status"
             aria-label={`Balance ${money(target)}`}
-            className={cn("font-display text-[2rem] leading-none font-bold tracking-tight tabular-nums", allRowsShown ? "text-money" : "text-night dark:text-white")}
+            className={cn("font-display text-[1.5rem] leading-none font-bold tracking-tight tabular-nums sm:text-[2rem]", allRowsShown ? "text-money" : "text-night dark:text-white")}
           >
             {money(display)}
           </p>
@@ -266,7 +266,7 @@ function Header() {
           </a>
         </nav>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={toggleTheme}
@@ -277,15 +277,16 @@ function Header() {
           </button>
           <Link
             to="/login"
-            className="hidden rounded-lg px-3.5 py-2 text-[13px] font-semibold text-slate-600 transition-colors hover:bg-slate-200/60 hover:text-night sm:block dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
+            className="hidden rounded-lg px-3.5 py-2 text-[13px] font-semibold text-slate-600 transition-colors hover:bg-slate-200/60 hover:text-night md:block dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
           >
             Sign in
           </Link>
           <Link
             to="/register"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-[13px] font-semibold text-white shadow-sm transition-colors hover:bg-blue-700"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-2 text-[12px] font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 sm:px-4 sm:text-[13px]"
           >
-            Open a ledger
+            <span className="hidden sm:inline">Open a ledger</span>
+            <span className="sm:hidden">Sign up</span>
             <ArrowRight size={14} />
           </Link>
         </div>
@@ -296,12 +297,12 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="mx-auto grid w-full max-w-6xl items-center gap-12 px-5 pt-14 pb-16 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pt-20 lg:pb-24">
+    <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 pt-12 pb-14 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pt-20 lg:pb-24">
       <div>
         <p className="animate-rise font-mono text-[11px] font-medium tracking-[0.22em] text-blue-600 uppercase dark:text-blue-400">
           Personal finance, read at a glance
         </p>
-        <h1 className="animate-rise mt-5 font-display text-4xl leading-[1.05] font-bold tracking-tight text-night sm:text-5xl lg:text-[3.6rem] dark:text-white" style={{ animationDelay: "60ms" }}>
+        <h1 className="animate-rise mt-5 font-display text-[2rem] leading-[1.1] font-bold tracking-tight text-night sm:text-5xl lg:text-[3.6rem] dark:text-white" style={{ animationDelay: "60ms" }}>
           Every <FadingCurrencyWord />,
           <br />
           <span className="text-blue-600 dark:text-blue-400">accounted for.</span>

@@ -62,7 +62,7 @@ export default function Settings() {
           <Field label="Email address" htmlFor="set-email" hint="Used for authentication and notifications.">
             <Input id="set-email" type="email" value={user.email} onChange={(e) => update({ email: e.target.value })} />
           </Field>
-          <div className="flex items-center gap-4 sm:col-span-2 pt-2">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 sm:col-span-2 pt-2">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-base font-semibold text-white">
               {user.initials}
             </span>
@@ -96,13 +96,13 @@ export default function Settings() {
               <option value="yyyy-MM-dd">2026-08-12 (ISO)</option>
             </Select>
           </Field>
-          <div className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-white/[0.06] px-4 py-3 sm:col-span-2 bg-slate-50 dark:bg-white/[0.02]">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-slate-200 dark:border-white/[0.06] px-4 py-3 sm:col-span-2 bg-slate-50 dark:bg-white/[0.02]">
             <div>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Color mode</p>
               <p className="text-xs text-slate-400 dark:text-slate-500">Active: {theme === "dark" ? "Dark" : "Light"}</p>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="secondary" size="sm" onClick={toggleTheme}>
+              <Button variant="secondary" size="sm" onClick={toggleTheme} className="w-full sm:w-auto">
                 Switch to {theme === "dark" ? "Light" : "Dark"}
               </Button>
             </div>
@@ -164,7 +164,7 @@ export default function Settings() {
       <div className="space-y-6">
         {sections.map((s) => (
           <Card key={s.title}>
-            <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/[0.06] px-5 py-4">
+            <div className="flex items-center gap-3 border-b border-slate-100 dark:border-white/[0.06] px-4 py-3.5 sm:px-5 sm:py-4">
               <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
                 <s.icon size={18} strokeWidth={2.2} />
               </span>
@@ -173,7 +173,7 @@ export default function Settings() {
                 <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{s.description}</p>
               </div>
             </div>
-            <div className="p-5">{s.body}</div>
+            <div className="p-4 sm:p-5">{s.body}</div>
           </Card>
         ))}
       </div>
