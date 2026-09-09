@@ -32,11 +32,31 @@ const waitFor = (fn, timeout = 8000) =>
     tick();
   });
 
+const renderGoogleButton = (element, clientId, callback) => {
+  const width = Math.max(200, Math.floor(element.getBoundingClientRect().width));
+
+  window.google.accounts.id.initialize({
+    client_id: clientId,
+    callback,
+    auto_select: false,
+  });
+
+  window.google.accounts.id.renderButton(element, {
+    type: "standard",
+    theme: "outline",
+    size: "large",
+    text: "continue_with",
+    shape: "rectangular",
+    width,
+  });
+};
+
 export default function SocialAuth({ onError }) {
   const { socialLogin } = useAuth();
   const [config, setConfig] = useState(null);
   const buttonRef = useRef(null);
   const doneRef = useRef(false);
+  const resizeHandlerRef = useRef(null);
 
   useEffect(() => {
     let active = true;
@@ -52,44 +72,43 @@ export default function SocialAuth({ onError }) {
     }
 
     let cancelled = false;
-    let resizeObserver = null;
+    let resizeTimer = null;
+
     loadScript("https://accounts.google.com/gsi/client")
       .then(() => waitFor(() => window.google?.accounts?.id))
       .then(() => {
-        if (cancelled) return;
-        const render = () => {
-          if (cancelled || !buttonRef.current) return;
-          const width = Math.max(200, Math.floor(buttonRef.current.getBoundingClientRect().width));
-          window.google.accounts.id.renderButton(buttonRef.current, {
-            type: "standard",
-            theme: "outline",
-            size: "large",
-            text: "continue_with",
-            shape: "rectangular",
-            width,
-          });
+        if (cancelled || !buttonRef.current) return;
+
+        const callback = (response) => {
+          if (doneRef.current) return;
+          if (response?.credential) {
+            doneRef.current = true;
+            socialLogin("google", response.credential).catch((err) => {
+              doneRef.current = false;
+              if (onError) onError(apiError(err, err.message || "Google sign-in failed"));
+            });
+          } else {
+            if (onError) onError("Google sign-in failed");
+          }
         };
-        window.google.accounts.id.initialize({
-          client_id: config.googleClientId,
-          callback: (response) => {
-            if (doneRef.current) return;
-            if (response?.credential) {
-              doneRef.current = true;
-              socialLogin("google", response.credential).catch((err) => {
-                doneRef.current = false;
-                if (onError) onError(apiError(err, err.message || "Google sign-in failed"));
-              });
-            } else {
-              if (onError) onError("Google sign-in failed");
-            }
-          },
-          auto_select: false,
-          cancel_on_tap_outside: true,
-        });
-        render();
+
+        renderGoogleButton(buttonRef.current, config.googleClientId, callback);
         buttonRef.current.dataset.rendered = "true";
-        resizeObserver = new ResizeObserver(() => render());
-        resizeObserver.observe(buttonRef.current);
+
+        // Re-render the button on real, settled size changes (e.g. rotation or
+        // resizing the browser) with a debounce. Re-rendering while the account
+        // chooser popup is open destroys the button iframe and closes the popup,
+        // so a small transient resize (e.g. scrollbar toggling) is ignored.
+        const onResize = () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            if (cancelled || !buttonRef.current) return;
+            renderGoogleButton(buttonRef.current, config.googleClientId, callback);
+          }, 400);
+        };
+        window.removeEventListener("resize", resizeHandlerRef.current);
+        resizeHandlerRef.current = onResize;
+        window.addEventListener("resize", onResize);
       })
       .catch((err) => {
         if (cancelled) return;
@@ -98,7 +117,9 @@ export default function SocialAuth({ onError }) {
 
     return () => {
       cancelled = true;
-      if (resizeObserver) resizeObserver.disconnect();
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", resizeHandlerRef.current);
+      resizeHandlerRef.current = null;
     };
   }, [config, socialLogin, onError]);
 
