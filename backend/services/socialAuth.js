@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { createPublicKey } = require("crypto");
 
 const GOOGLE_JWKS_URL = "https://www.googleapis.com/oauth2/v3/certs";
 const GOOGLE_ISS = [
@@ -33,12 +34,16 @@ const verifyGoogleIdToken = async (idToken) => {
 
     let payload;
     try {
-        payload = jwt.verify(idToken, key, {
+        // Google's JWKS returns RSA keys in JWK format (n + e). jsonwebtoken
+        // cannot verify RS256 tokens from a raw JWK object, so convert it to
+        // a Node KeyObject first.
+        const publicKey = createPublicKey({ key, format: "jwk" });
+        payload = jwt.verify(idToken, publicKey, {
             issuer: GOOGLE_ISS,
             algorithms: ["RS256"],
         });
-    } catch {
-        throw new Error("Invalid Google token");
+    } catch (err) {
+        throw new Error(`Invalid Google token: ${err.message}`);
     }
 
     const clientId = (process.env.GOOGLE_CLIENT_ID || "").trim();

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
-import { apiClient } from "../lib/api.js";
+import { apiClient, apiError } from "../lib/api.js";
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
@@ -77,7 +77,7 @@ export default function SocialAuth({ onError }) {
               doneRef.current = true;
               socialLogin("google", response.credential).catch((err) => {
                 doneRef.current = false;
-                if (onError) onError(err.message || "Google sign-in failed");
+                if (onError) onError(apiError(err, err.message || "Google sign-in failed"));
               });
             } else {
               if (onError) onError("Google sign-in failed");
