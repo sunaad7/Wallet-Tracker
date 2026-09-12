@@ -81,14 +81,6 @@ body {
   @apply bg-slate-300 dark:bg-slate-700 rounded-full;
 }
 
-.no-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
 .skeleton {
   @apply bg-slate-200 dark:bg-slate-800 rounded-md relative overflow-hidden;
 }
